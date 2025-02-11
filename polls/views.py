@@ -30,7 +30,7 @@ def vote(request, question_id):
     # 파라미터로는 모델 클래스, 모델 매니저, QuerySet 중 하나
     # 다수의 객체를 가져오려면 get_list_or_404()
     # hasattr(객체, "속성 는 메서드") <-- 객체가 속성이나, 메서드를 가지고 있으면 True
-    # klass 는 Class, Manager, QuerySet 중 하나를 받을 수 있는 변수. --> 왜 class 가 아니고 klass 인 이유는 class 는 파이썬에서 예약어이기 때문
+    # klass 는 Class, Manager, QuerySet 중 하나를 받을 수 있는 변수. --> 왜 class 가 아니고 klass 인 이유는 class 는 파이썬에서 예약어이기 때문임
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
