@@ -9,10 +9,14 @@ from .models import Question, Choice
 
 def index(request):
     lastest_question_list = Question.objects.all().order_by("-pub_date")[:5]
+    # 템플릿 객체
     template = loader.get_template("polls/index.html")
+    # 딕셔너리
     context = {
         "latest_question_list": lastest_question_list
     }
+    # final_html = template.render(context, request)  # 최종 HTML 생성을 하여 반환 하는것
+    # request 반환이유: request를 넘겨주면 로그인한 사용자 정보, 현재 URL, CSRF 토큰 등 다양한 기능을 사용할 수 있음
     return HttpResponse(template.render(context, request))
 
 
