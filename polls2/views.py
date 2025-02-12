@@ -1,32 +1,32 @@
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.template import loader
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.views import generic
 
-from .models import Question, Choice
-
-
-def index(request):
-    lastest_question_list = Question.objects.all().order_by("-pub_date")[:5]
-    # 템플릿 객체
-    template = loader.get_template("polls/index.html")
-    # 딕셔너리
-    context = {
-        "latest_question_list": lastest_question_list
-    }
-    # final_html = template.render(context, request)  # 최종 HTML 생성을 하여 반환 하는것
-    # request 반환이유: request를 넘겨주면 로그인한 사용자 정보, 현재 URL, CSRF 토큰 등 다양한 기능을 사용할 수 있음
-    return HttpResponse(template.render(context, request))
+from .models import Choice, Question
 
 
-def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
+class IndexView(generic.ListView):
+    template_name = "polls2/index.html"
+    context_object_name = "latest_question_list"
+    ordering = '-pub_date'
+    model = Question
+
+    # def get_queryset(self):
+    #     """Return the last five published questions."""
+    #     return Question.objects.order_by("-pub_date")[:5]
 
 
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "polls/result.html", {"question": question})
+
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = "polls2/detail.html"
+
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = "polls2/result.html"
 
 
 def vote(request, question_id):
@@ -42,7 +42,7 @@ def vote(request, question_id):
         # Redisplay the question voting form.
         return render(
             request,
-            "polls/detail.html",
+            "polls2/detail.html",
             {
                 "question": question,
                 "error_message": "You didn't select a choice.",
@@ -55,17 +55,8 @@ def vote(request, question_id):
         # 이 코드는 votes 필드에 대한 값을 메모리에서 처리하는 것이 아니라, db에서 직접 현재 votes 값에 1을 더해서 업데이트하는 방식. 이유는 동시성 문제.
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse("polls:result", args=(question.id,)))
+
+        return HttpResponseRedirect(reverse("polls2:results", args=(question.id,)))
+        # return redirect("polls2:results", pk=question.id)
 
 
-def question_list(request):
-    latest_question_list = Question.objects.all().order_by("-pub_date")[:5]
-    return render(request, "polls/question_list.html", {"latest_question_list": latest_question_list})
-
-
-def question_detail(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-    return render(request, "polls/question_detail.html", {"question": question})

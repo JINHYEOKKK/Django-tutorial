@@ -1,0 +1,20 @@
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+        <a href="{% url 'polls2:detail' question.id %}">{{ question.question_text }}/{{ question.pub_date }}</a><br>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+
+{#    <table>#}
+{#        {% for x in for_number %}#}
+{#            <tr>#}
+{#                {% for i in for_number %}#}
+{#                    <td>{{ i }}</td>#}
+{#                {%  endfor %}#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
