@@ -60,3 +60,27 @@ def vote(request, question_id):
         # return redirect("polls2:results", pk=question.id)
 
 
+class ViewQuestionUpdateView(generic.UpdateView):
+    model = Question
+    template_name = "polls2/result.html"
+
+
+def sum_n_numbers(*args):
+    print(type(args))
+    return sum(args)
+
+
+print(sum_n_numbers(1, 2, 3, 4), "\n")
+
+
+def sum_n_words(**kwargs):
+    print(type(kwargs))
+    print(kwargs)
+    return sum(kwargs.values())
+
+
+sum_n_words(a=1, b=2, c=3, d=4)
+
+# "CreateView",
+#     "UpdateView",
+    # "DeleteView",

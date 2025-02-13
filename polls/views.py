@@ -7,6 +7,15 @@ from django.urls import reverse
 from .models import Question, Choice
 
 
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, "polls/result.html", {"question": question})
+
+
+def detail(request, question_id):
+    return HttpResponse("You're looking at question %s." % question_id)
+
+
 def index(request):
     lastest_question_list = Question.objects.all().order_by("-pub_date")[:5]
     # 템플릿 객체
@@ -18,15 +27,6 @@ def index(request):
     # final_html = template.render(context, request)  # 최종 HTML 생성을 하여 반환 하는것
     # request 반환이유: request를 넘겨주면 로그인한 사용자 정보, 현재 URL, CSRF 토큰 등 다양한 기능을 사용할 수 있음
     return HttpResponse(template.render(context, request))
-
-
-def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
-
-
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "polls/result.html", {"question": question})
 
 
 def vote(request, question_id):
@@ -61,11 +61,6 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse("polls:result", args=(question.id,)))
 
 
-def question_list(request):
-    latest_question_list = Question.objects.all().order_by("-pub_date")[:5]
-    return render(request, "polls/question_list.html", {"latest_question_list": latest_question_list})
 
 
-def question_detail(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-    return render(request, "polls/question_detail.html", {"question": question})
+
