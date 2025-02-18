@@ -155,6 +155,18 @@ def sum_n_words(**kwargs):
 
 sum_n_words(a=1, b=2, c=3, d=4)
 
+
+def comprehension():
+    # 딕셔너리를 List 로
+    data = {"name": "Jim", "age": 29, "hobby": "Golf"}
+    keys = [k for k, v in data.items()]
+
+    return print(keys)
+
+
+comprehension()
+
+
 # "CreateView",
 #     "UpdateView",
     # "DeleteView",
